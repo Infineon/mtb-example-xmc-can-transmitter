@@ -43,6 +43,7 @@
 #include "cy_utils.h"
 #include "xmc_can.h"
 #include "xmc_scu.h"
+#include "platform.h"
 #include <stdio.h>
 
 /*****************************************************************************
@@ -51,26 +52,6 @@
 /* Declarations for System timer timing */
 #define TICKS_PER_SECOND      10                        /* Ticks per Second */
 
-#ifdef TARGET_KIT_XMC14_BOOT_001
-
-#define CAN_CLOCK_SOURCE      XMC_CAN_CANCLKSRC_MCLK   /* CAN module clock source  - Peripheral Clock*/
-#define CAN_FREQUENCY         48000000                 /* Frequency of the CAN module in Hz */
-
-/* Configure CAN TX GPIO mode */
-#define CAN_TX_MODE           XMC_GPIO_MODE_OUTPUT_PUSH_PULL | XMC_GPIO_MODE_OUTPUT_ALT9
-
-#endif
-
-#ifdef TARGET_KIT_XMC47_RELAX_V1
-
-#define CAN_CLOCK_SOURCE      XMC_CAN_CANCLKSRC_FPERI  /* CAN module clock source  - Peripheral Clock*/
-#define CAN_FREQUENCY         144000000                /* Frequency of the CAN module in Hz */
-
-/* Configure CAN TX GPIO mode */
-#define CAN_TX_MODE           XMC_GPIO_MODE_OUTPUT_PUSH_PULL | XMC_GPIO_MODE_OUTPUT_ALT2
-
-#endif
-
 #define BAUD_RATE             500000    /* CAN Node baud rate in bps */
 #define SAMPLE_POINT          8000      /* Sample Point. Range = [0, 10000] with respect to [0%, 100%] of the total bit time. */
 #define SJW                   1         /* Synchronization Jump Width. Range: 0 - 3 */
@@ -78,7 +59,6 @@
 #define CAN_IDENTIFIER_MASK   0xFF      /* CAN identifier Mask. Sets mask bits of Acceptance Mask Register */
 #define CAN_IDE_MASK          1         /* Identifier Extension Bit of Message Object. Message object receives frames only with matching IDE bit */
 #define DATA_LENGTH_BYTES     1         /* CAN data Length. Range: 0 - 8 */
-#define NODE1                 1         /* Node1 */
 #define MESSAGE_OBJECT        0         /* Message Object 0 */
 
 
@@ -171,32 +151,32 @@ int main(void)
     XMC_CAN_InitEx(CAN, CAN_CLOCK_SOURCE, CAN_FREQUENCY);
 
     /* Configure CAN Node baud rate */
-    XMC_CAN_NODE_NominalBitTimeConfigureEx(CAN_NODE1, &baud);
+    XMC_CAN_NODE_NominalBitTimeConfigureEx(CAN_NODE, &baud);
 
-    /* NODE 1 initialization */
-    /* Allow to change the configuration of the CAN node 1 */
-    XMC_CAN_NODE_EnableConfigurationChange(CAN_NODE1);
+    /* CAN node initialization */
+    /* Allow to change the configuration of the CAN node */
+    XMC_CAN_NODE_EnableConfigurationChange(CAN_NODE);
 
     /* Disable CAN node participation in CAN traffic */
-    XMC_CAN_NODE_SetInitBit(CAN_NODE1);
+    XMC_CAN_NODE_SetInitBit(CAN_NODE);
 
     /* Set CAN input receive pin */
-    XMC_CAN_NODE_SetReceiveInput(CAN_NODE1, XMC_CAN_NODE_RECEIVE_INPUT_RXDCC);
+    XMC_CAN_NODE_SetReceiveInput(CAN_NODE, XMC_CAN_NODE_RECEIVE_INPUT);
 
     /* Connect CAN TX pin to the CAN Node 1 */
-    XMC_GPIO_SetMode(CYBSP_CAN_TX_PORT, CYBSP_CAN_TX_PIN, CAN_TX_MODE);
+    XMC_GPIO_SetMode(CYBSP_CAN_TX_PORT, CYBSP_CAN_TX_PIN, CAN_TX_PIN_MODE);
 
     /* Initializes CAN Message Object */
     XMC_CAN_MO_Config(&can_message);
 
-    /* Allocate Message object to Node 1 */
-    XMC_CAN_AllocateMOtoNodeList(CAN, NODE1, MESSAGE_OBJECT);
+    /* Allocate Message object to Node */
+    XMC_CAN_AllocateMOtoNodeList(CAN, NODE_NUMBER, MESSAGE_OBJECT);
 
-    /* Lock the configuration of CAN node 1 */
-    XMC_CAN_NODE_DisableConfigurationChange(CAN_NODE1);
+    /* Lock the configuration of CAN node */
+    XMC_CAN_NODE_DisableConfigurationChange(CAN_NODE);
 
-    /* Enable CAN node 1 participation in CAN traffic */
-    XMC_CAN_NODE_ResetInitBit(CAN_NODE1);
+    /* Enable CAN node participation in CAN traffic */
+    XMC_CAN_NODE_ResetInitBit(CAN_NODE);
 
     /* Enable system timer */
     SysTick_Config(SystemCoreClock / TICKS_PER_SECOND);
