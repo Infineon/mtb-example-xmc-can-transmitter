@@ -4,8 +4,7 @@ This example demonstrates how to transmit CAN messages over the CAN bus using th
 
 [View this README on GitHub.](https://github.com/Infineon/mtb-example-xmc-can-transmitter)
 
-[Provide feedback on this code example.](https://cypress.co1.qualtrics.com/jfe/form/SV_1NTns53sK2yiljn?Q_EED=eyJVbmlxdWUgRG9jIElkIjoiQ0UyMzI2MjgiLCJTcGVjIE51bWJlciI6IjAwMi0zMjYyOCIsIkRvYyBUaXRsZSI6IlhNQyZ0cmFkZTsgTUNVOiBDQU4gdHJhbnNtaXR0ZXIiLCJyaWQiOiJicnZpIiwiRG9jIHZlcnNpb24iOiIyLjAuMCIsIkRvYyBMYW5ndWFnZSI6IkVuZ2xpc2giLCJEb2MgRGl2aXNpb24iOiJNQ0QiLCJEb2MgQlUiOiJJQ1ciLCJEb2MgRmFtaWx5IjoiTi9BIn0=)
-
+[Provide feedback on this code example.](https://cypress.co1.qualtrics.com/jfe/form/SV_1NTns53sK2yiljn?Q_EED=eyJVbmlxdWUgRG9jIElkIjoiQ0UyMzI2MjgiLCJTcGVjIE51bWJlciI6IjAwMi0zMjYyOCIsIkRvYyBUaXRsZSI6IlhNQyZ0cmFkZTsgTUNVOiBDQU4gdHJhbnNtaXR0ZXIiLCJyaWQiOiJicnZpIiwiRG9jIHZlcnNpb24iOiIyLjEuMCIsIkRvYyBMYW5ndWFnZSI6IkVuZ2xpc2giLCJEb2MgRGl2aXNpb24iOiJNQ0QiLCJEb2MgQlUiOiJJQ1ciLCJEb2MgRmFtaWx5IjoiTi9BIn0=)
 ## Requirements
 
 - [ModusToolbox&trade; software](https://www.infineon.com/modustoolbox) v3.0
@@ -22,13 +21,19 @@ This example demonstrates how to transmit CAN messages over the CAN bus using th
 ## Supported kits (make variable 'TARGET')
 
 - [XMC1400 boot kit](https://www.infineon.com/cms/en/product/evaluation-boards/kit_xmc14_boot_001/) (`KIT_XMC14_BOOT_001`) - Default value of `TARGET`
+- [XMC4200 Platform2Go kit](https://www.infineon.com/cms/en/product/evaluation-boards/kit_xmc_plt2go_xmc4200/) (`KIT_XMC_PLT2GO_XMC4200`)
+- [XMC4300 relax EtherCAT kit](https://www.infineon.com/cms/en/product/evaluation-boards/kit_xmc43_relax_ecat_v1/) (`KIT_XMC43_RELAX_ECAT_V1`)
+- [XMC4400 Platform2Go kit](https://www.infineon.com/cms/en/product/evaluation-boards/kit_xmc_plt2go_xmc4400/) (`KIT_XMC_PLT2GO_XMC4400`)
+- [XMC4500 relax kit](https://www.infineon.com/cms/en/product/evaluation-boards/kit_xmc45_relax_v1/) (`KIT_XMC45_RELAX_V1`)
 - [XMC4700 relax kit](https://www.infineon.com/cms/en/product/evaluation-boards/kit_xmc47_relax_v1/) (`KIT_XMC47_RELAX_V1`)
+- [XMC4800 relax EtherCAT kit](https://www.infineon.com/cms/en/product/evaluation-boards/kit_xmc48_relax_ecat_v1/) (`KIT_XMC48_RELAX_ECAT_V1`)
+
 
 ## Hardware setup
 
 This example uses the board's default configuration. See the kit user guide to ensure that the board is configured correctly.
 
-Two XMC&trade; MCU boards are required to test this code example: one for the XMC&trade; MCU CAN transmitter application and the other for the [XMC&trade; MCU: CAN receiver](https://github.com/Infineon/mtb-example-xmc-can-receiver) application. See [Supported kits](#supported-kits-make-variable-target) for kits supported by this code example.
+Two XMC MCU boards are required to test this code example: one for the [XMC&trade; MCU: CAN receiver](https://github.com/Infineon/mtb-example-xmc-can-receiver) application and the other for the [XMC&trade; MCU: CAN transmitter](https://github.com/Infineon/mtb-example-xmc-can-transmitter) application. See [Supported kits](#supported-kits-make-variable-target).
 
 Connect the CANH and CANL of one board to the CANH and CANL of the other board respectively to establish CAN communication between the transmitter and the receiver node. Also connect the ground pin of both boards together.
 
@@ -43,7 +48,12 @@ Connect the CANH and CANL of one board to the CANH and CANL of the other board r
 
 **Notes:**
 
-- The CAN bus lines (signals CANH and CANL) of the on-board transceiver in the KIT_XMC47_RELAX_V1 kit is not terminated by a 120 Ω resistor and must be terminated externally. Add a 120 Ω termination resistor between the CANH and CANL pins for proper operation of CAN.
+- The KIT_XMC_PLT2GO_XMC4200 and KIT_XMC43_RELAX_ECAT_V1 kits provide the CAN interface via a D-Sub DE-9 connector. Therefore, you might need a DBP connector or DB9 to RS232/ RS485 convertor board to connect these boards.
+
+- The KIT_XMC45_RELAX_V1 kit does not have an external CAN transceiver. Therefore, you need to connect an external CAN transceiver to the CAN Tx and Rx pins.
+
+- The CAN bus lines (signals CANH and CANL) of the on-board transceiver in the KIT_XMC47_RELAX_V1 and KIT_XMC_PLT2GO_XMC4400 kits are not terminated by a 120 Ω resistor and must be terminated externally. Add a 120 Ω termination resistor between the CANH and CANL pins for proper operation of CAN.
+
 
 **Figure 1. Hardware setup**
 
@@ -79,7 +89,7 @@ Create the project and open it using one of the following:
 
 6. Click **Create** to complete the application creation process.
 
-For more details, see the [Eclipse IDE for ModusToolbox&trade; software user guide](https://www.infineon.com/MTBEclipseIDEUserGuide) (locally available at *{ModusToolbox&trade; software install directory}/ide_{version}/docs/mt_ide_user_guide.pdf*).
+For more details, see the [Eclipse IDE for ModusToolbox&trade; software user guide](https://www.infineon.com/MTBEclipseIDEUserGuide) (locally available at *{ModusToolbox&trade; software install directory}/docs_{version}/mt_ide_user_guide.pdf*).
 
 </details>
 
@@ -100,7 +110,7 @@ Argument | Description | Required/optional
 
 <br>
 
-The following example will clone the "[CAN transmitter](https://github.com/Infineon/mtb-example-xmc-can-transmitter)" application with the desired name "CANTransmitter" configured for the *CY8CKIT-062-WIFI-BT* BSP into the specified working directory, *C:/mtb_projects*:
+The following example clones the "[CAN transmitter](https://github.com/Infineon/mtb-example-xmc-can-transmitter)" application with the desired name "CANTransmitter" configured for the *KIT_XMC14_BOOT_001* BSP into the specified working directory, *C:/mtb_projects*:
 
    ```
    project-creator-cli --board-id KIT_XMC14_BOOT_001 --app-id mtb-example-xmc-can-transmitter --user-app-name CANTransmitter --target-dir "C:/mtb_projects"
@@ -108,19 +118,54 @@ The following example will clone the "[CAN transmitter](https://github.com/Infin
 
 **Note:** The project-creator-cli tool uses the `git clone` and `make getlibs` commands to fetch the repository and import the required libraries. For details, see the "Project creator tools" section of the [ModusToolbox&trade; software user guide](https://www.infineon.com/ModusToolboxUserGuide) (locally available at *{ModusToolbox&trade; software install directory}/docs_{version}/mtb_user_guide.pdf*).
 
+To work with a different supported kit later, use the [Library Manager](https://www.infineon.com/ModusToolboxLibraryManager) to choose the BSP for the supported kit. You can invoke the Library Manager GUI tool from the terminal using `make library-manager` command or use the Library Manager CLI tool "library-manager-cli" to change the BSP.
+
+The "library-manager-cli" tool has the following arguments:
+
+Argument | Description | Required/optional
+---------|-------------|-----------
+`--add-bsp-name` | Name of the BSP that should be added to the application | Required
+`--set-active-bsp` | Name of the BSP that should be as active BSP for the application | Required
+`--add-bsp-version`| Specify the version of the BSP that should be added to the application if you do not wish to use the latest from manifest | Optional
+`--add-bsp-location`| Specify the location of the BSP (local/shared) if you prefer to add the BSP in a shared path | Optional
+
+<br />
+
+Following example adds the KIT_XMC47_RELAX_V1 BSP to the already created application and makes it the active BSP for the app:
+
+   ```
+   library-manager-cli --project "C:/mtb_projects/CANTransmitter" --add-bsp-name KIT_XMC47_RELAX_V1 --add-bsp-version "latest-v4.X" --add-bsp-location "local"
+
+   library-manager-cli --project "C:/mtb_projects/CANTransmitter" --set-active-bsp APP_KIT_XMC47_RELAX_V1
+   ```
+
 </details>
 
-<details open><summary><b>In third-party IDEs</b></summary>
+<details><summary><b>In third-party IDEs</b></summary>
 
-**Note:** Only VS code is supported.
+Use one of the following options:
 
-1. Follow the instructions from the **In command-line interface (CLI)** section to create the application, and import the libraries using the `make getlibs` command.
+- **Use the standalone [Project Creator](https://www.infineon.com/ModusToolboxProjectCreator) tool:**
 
-2. Export the application to a supported IDE using the `make <ide>` command.
+   1. Launch Project Creator from the Windows Start menu or from *{ModusToolbox&trade; software install directory}/tools_{version}/project-creator/project-creator.exe*.
 
-   For a list of supported IDEs and more details, see the "Exporting to IDEs" section of the [ModusToolbox&trade; software user guide](https://www.infineon.com/ModusToolboxUserGuide) (locally available at *{ModusToolbox&trade; software install directory}/docs_{version}/mtb_user_guide.pdf*).
+   2. In the initial **Choose Board Support Package** screen, select the BSP, and click **Next**.
 
-3. Follow the instructions displayed in the terminal to create or import the application as an IDE project.
+   3. In the **Select Application** screen, select the appropriate IDE from the **Target IDE** drop-down menu.
+
+   4. Click **Create** and follow the instructions printed in the bottom pane to import or open the exported project in the respective IDE.
+
+<br />
+
+- **Use command-line interface (CLI):**
+
+   1. Follow the instructions from the **In command-line interface (CLI)** section to create the application.
+
+   2. Export the application to a supported IDE using the `make <ide>` command.
+
+   3. Follow the instructions displayed in the terminal to create or import the application as an IDE project.
+
+For a list of supported IDEs and more details, see the "Exporting to IDEs" section of the [ModusToolbox&trade; software user guide](https://www.infineon.com/ModusToolboxUserGuide) (locally available at *{ModusToolbox&trade; software install directory}/docs_{version}/mtb_user_guide.pdf*).
 
 </details>
 
@@ -179,13 +224,13 @@ Code examples  | [Using ModusToolbox&trade; software](https://github.com/Infineo
 Device documentation | [XMC1000 family datasheets](https://www.infineon.com/cms/en/product/microcontroller/32-bit-industrial-microcontroller-based-on-arm-cortex-m/32-bit-xmc1000-industrial-microcontroller-arm-cortex-m0/#document-group-myInfineon-49) <br> [XMC1000 family technical reference manuals](https://www.infineon.com/cms/en/product/microcontroller/32-bit-industrial-microcontroller-based-on-arm-cortex-m/32-bit-xmc1000-industrial-microcontroller-arm-cortex-m0/#document-group-myInfineon-44) <br> [XMC4000 family datasheets](https://www.infineon.com/cms/en/product/microcontroller/32-bit-industrial-microcontroller-based-on-arm-cortex-m/32-bit-xmc4000-industrial-microcontroller-arm-cortex-m4/#document-group-myInfineon-49) <br> [XMC4000 family technical reference manuals](https://www.infineon.com/cms/en/product/microcontroller/32-bit-industrial-microcontroller-based-on-arm-cortex-m/32-bit-xmc4000-industrial-microcontroller-arm-cortex-m4/#document-group-myInfineon-44)
 Development kits | [XMC&trade; MCU eval boards](https://www.infineon.com/cms/en/product/microcontroller/32-bit-industrial-microcontroller-based-on-arm-cortex-m/#boards)
 Libraries on GitHub  | [mtb-xmclib-cat3](https://github.com/Infineon/mtb-xmclib-cat3) – XMC&trade; MCU peripheral library (XMCLib)
-Tools  | [Eclipse IDE for ModusToolbox&trade; software](https://www.infineon.com/modustoolbox) – ModusToolbox&trade; software is a collection of easy-to-use software and tools enabling rapid development with Infineon MCUs, covering applications from embedded sense and control to wireless and cloud-connected systems using AIROC&trade; Wi-Fi and Bluetooth® connectivity devices.
+Tools | [Eclipse IDE for ModusToolbox&trade; software](https://www.infineon.com/modustoolbox) – ModusToolbox&trade; software is a collection of easy-to-use software and tools enabling rapid development with Infineon MCUs, covering applications from embedded sense and control to wireless and cloud-connected systems using AIROC&trade; Wi-Fi and Bluetooth&reg; connectivity devices.
 
 ## Other resources
 
 Infineon provides a wealth of data at www.infineon.com to help you select the right device, and quickly and effectively integrate it into your design.
 
-For XMC&trade; MCU devices, see [32-bit XMC™ industrial microcontroller based on Arm® Cortex®-M](https://www.infineon.com/cms/en/product/microcontroller/32-bit-industrial-microcontroller-based-on-arm-cortex-m/).
+For XMC&trade; MCU devices, see [32-bit XMC&trade; Industrial microcontroller based on Arm&reg; Cortex&reg;-M](https://www.infineon.com/cms/en/product/microcontroller/32-bit-industrial-microcontroller-based-on-arm-cortex-m/).
 
 ## Document history
 
@@ -195,7 +240,8 @@ Document title: *CE232628* – *XMC&trade; MCU: CAN transmitter*
 | ------- | --------------------- |
 | 1.0.0   | New code example      |
 | 1.1.0   | Added support for new kits |
-| 2.0.0   | Updated to support ModusToolbox&trade; software v3.0, CE will not be backwards compatible with previous versions of ModusToolbox™ software. |
+| 2.0.0   | Updated to support ModusToolbox&trade; software v3.0. This CE is not backward compatible with previous version of ModusToolbox&trade; software. |
+| 2.1.0   | Added support for CAN personality |
 ------
 
 All other trademarks or registered trademarks referenced herein are the property of their respective owners.
